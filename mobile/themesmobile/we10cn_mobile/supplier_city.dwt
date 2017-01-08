@@ -117,7 +117,7 @@
 {if $is_jssdk}
 <script>
 
-
+    var useWX = false;
     wx.config({
         debug: false,
         appId: "{$signPackage.appId}",
@@ -151,6 +151,53 @@
         });
 
     });
+
+    if (useWX==false) {
+        /* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/8 */
+        var huo15_lng = 0;
+        var huo15_lat = 0;
+        var isMapInit = false;
+        var loc = null;
+        window.addEventListener('message', function(event) {
+            // 接收位置信息
+            loc = event.data;
+            console.log('location', loc);
+
+            // 另一个使用方式
+            if (!isMapInit && !loc) { //首次定位成功，创建地图
+                isMapInit = true;
+//            createPos(event.data);
+                console.log("event.data = null");
+            } else if (event.data) { //地图已经创建，再收到新的位置信息后更新地图中心点
+                console.log("event.data:",event.data);
+                createPos(event.data);
+            }
+        }, false);
+
+
+       /* //为防止定位组件在message事件监听前已经触发定位成功事件，在此处显示请求一次位置信息
+        document.getElementById("geoPage").contentWindow.postMessage('getLocation', '*');
+        //设置6s超时，防止定位组件长时间获取位置信息未响应
+        setTimeout(function() {
+            if(!loc) {
+                //主动与前端定位组件通信（可选），获取粗糙的IP定位结果
+                document.getElementById("geoPage")
+                        .contentWindow.postMessage('getLocation.robust', '*');
+            }
+        }, 6000); //6s为推荐值，业务调用方可根据自己的需求设置改时间，不建议太短
+*/
+
+        function createPos(data) {
+            huo15_lng = data.lng;
+            huo15_lat = data.lat;
+            console.log("createPos:", huo15_lat);
+            set_address(huo15_lat,huo15_lng);
+
+        }
+
+
+        /* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/8 end */
+    }
 
 
 
@@ -189,7 +236,9 @@
             createPos(event.data);
         }
     }, false);
-    //为防止定位组件在message事件监听前已经触发定位成功事件，在此处显示请求一次位置信息
+
+
+   /* //为防止定位组件在message事件监听前已经触发定位成功事件，在此处显示请求一次位置信息
     document.getElementById("geoPage").contentWindow.postMessage('getLocation', '*');
     //设置6s超时，防止定位组件长时间获取位置信息未响应
     setTimeout(function() {
@@ -200,7 +249,7 @@
         }
     }, 6000); //6s为推荐值，业务调用方可根据自己的需求设置改时间，不建议太短
 
-
+*/
     function createPos(data) {
         huo15_lng = data.lng;
         huo15_lat = data.lat;
