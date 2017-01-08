@@ -83,6 +83,6 @@ define('LICENCE_TIME', '2016-12-22 17:56:38');
 15 = 1 + 2 + 4 + 8
  */
 
-define('DEBUG_MODE', '1');
+define('DEBUG_MODE', '0');
 
 ?>

@@ -11,7 +11,7 @@
     <style>
         header{ background: #cc221a; position: relative;}
         #header .back {
-            background-image: url(../images/index.png);
+            background-image: url(themesmobile/huo15_mobile/images/index.png);
         }
         
         .content{ width: 100%; height: 100px; min-height: 350px; position: relative; background-color: #FFF;}
