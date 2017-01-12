@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{$page_title}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TemplateEndEditable -->
+    <!-- TemplateBeginEditable name="head" -->
+    <!-- TemplateEndEditable -->
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="animated_favicon.gif" type="image/gif" />
+    <link rel="alternate" type="application/rss+xml" title="RSS|{$page_title}" href="{$feed_url}" />
+</head>
+<body>
+<!-- #BeginLibraryItem "/library/page_header_supplier.lbi" --><!-- #EndLibraryItem -->
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">家湘宝</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="themes/wwwwe10cn/images/logo.gif" height="30" alt="">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#">附近的商家</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">按区域检索 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="青岛市北">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">备用按钮</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术支持 <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div>
+    <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')">
+        <option value="0">请选择</option>
+        {foreach from=$province_list item=province}
+        <option value="{$province.region_id}" {if $userSession.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
+        {/foreach}
+    </select>
+    <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
+        <option value="0">请选择</option>
+        {foreach from=$city_list item=city}
+        <option value="{$city.region_id}" {if $userSession.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
+        {/foreach}
+    </select>
+    <!--<select name="district" id="selDistricts" {if !$district_list}style="display:none"{/if}>
+    <option value="0">请选择</option>
+    {foreach from=$district_list item=district}
+    <option value="{$district.region_id}" {if $userSession.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
+    {/foreach}
+    </select>-->
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div id="map_container"></div>
+        </div>
+        <div class="col-md-4">
+            <input type="hidden" name="init_lng" value="{$latitude}">
+            <input type="hidden" name="init_lat" value="{$longitude}">
+            <div class="shop-list-box">
+                <ul class="shop-list">
+                    <!-- {foreach from=$supplier_list item=sup} -->
+                    <li class="ng-scope" user-id="{$sup.user_id}">
+                        <div>
+                            <div class="shop-thumb">
+                                <a href="supplier.php?suppId={$sup.supplier_id}">
+                                    <img src="{$sup.shop_logo}" style="display: inline;">
+                                </a>
+                            </div>
+                            <div class="shop-info">
+                                <div class="shop-name">
+                                    <a class="ng-binding" href="supplier.php?suppId={$sup.supplier_id}">{$sup.shop_name}(<font color="#2BB8AA">{$sup.distance_}</font>)</a>
+                                </div>
+                                <div class="shop-address">
+                                    <span class="l ng-binding">{$sup.shop_country}-{$sup.shop_province}-{$sup.shop_city}-{$sup.shop_address}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shop-products ng-scope">
+                            <ul style="display: none;">
+                                <!-- {foreach from=$sup['goods_list'] item=goods} -->
+                                <li class="ng-scope">
+                                    <a href="goods.php?id={$goods.goods_id}">
+                                        <div class="product-thumb">
+                                            <img src="{$ROOTPATH}/{$goods.goods_thumb}" style="display: inline;">
+                                        </div>
+                                        <div class="product-name">
+                                            <p class="name ng-binding">{$goods.goods_name|truncate:12}</p>
+                                            <p class="price">¥<span class="ng-binding">{$goods.shop_price}</span></p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <!-- {/foreach} -->
+                            </ul>
+                        </div>
+
+                        <div class="shop-action">
+                           <!-- <div class="item navigation">
+                                <a href="supplier_near.php?act=map&supplier_id={$sup.supplier_id}"><i class="icon"></i>查看地图</a>
+                            </div>-->
+                            <div class="item contact">
+                                <a href="tel:{$sup.service_phone}"><i class="icon-phone"></i>{$sup.service_phone}</a>
+                            </div>
+                            <div class="item shop">
+                                <a href="supplier.php?suppId={$sup.supplier_id}">
+                                    <i class="icon"></i>进入店铺</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- {/foreach} -->
+                </ul>
+                {include file='library/pages.lbi'}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #map_container  {
+        width:100%;
+    }
+</style>
+<script>
+    var sJson = '{$supplier_list_json}';
+    var objJson = $.parseJSON(sJson);
+    $(function () {
+//        地图初始化
+        windowHeight();
+        var init_lng = $("input[name='init_lng']").val();
+        var init_lat = $("input[name='init_lat']").val();
+        var map = new BMap.Map("map_container");
+        var init_point = new BMap.Point(init_lat,init_lng);
+        map.centerAndZoom(init_point, 15);
+        map.enableScrollWheelZoom(true);
+        map.addControl(new BMap.NavigationControl());
+
+
+
+//        安插标注
+        var supplierPoints = {};
+        for(var i in objJson) {
+            supplierPoints[objJson[i].user_id] = objJson[i];
+            supplierPoints[objJson[i].user_id].point = new BMap.Point(supplierPoints[objJson[i].user_id].longitude,supplierPoints[objJson[i].user_id].latitude);
+            supplierPoints[objJson[i].user_id].marker = new BMap.Marker(supplierPoints[objJson[i].user_id].point);        // 创建标注
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
+            supplierPoints[objJson[i].user_id].marker.setIcon(myIcon);
+
+            map.addOverlay(supplierPoints[objJson[i].user_id].marker);
+
+
+
+            var opts = {
+                width : 250,     // 信息窗口宽度
+                height: 100,     // 信息窗口高度
+                title : supplierPoints[objJson[i].user_id].supplier_name  // 信息窗口标题
+            };
+            var sContent =
+                    "<h4 style='margin:0 0 5px 0;padding:0.2em 0'><a href='supplier.php?suppId=50' target='_blank'> "+supplierPoints[objJson[i].user_id].supplier_name+"</a></h4>" +
+                    "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>距离："+supplierPoints[objJson[i].user_id].distance_+"</p>" +
+                    "</div>";
+            supplierPoints[objJson[i].user_id].infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+
+
+            (function () {
+                var index = objJson[i].user_id
+                // 将标注添加到地图中
+                supplierPoints[index].marker.addEventListener("click", function(){
+
+                    map.openInfoWindow(supplierPoints[index].infoWindow, supplierPoints[index].point);
+
+
+                });
+            })();
+
+
+        }
+        console.log(supplierPoints);
+
+        //        鼠标经过事件
+
+        $(".shop-list li").hover(function () {
+            $(this).css({
+                background:"rgba(101, 153, 0, 0.1)"
+            });
+            var index = $(this).attr("user-id");
+            var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
+            map.centerAndZoom(point,13);
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(20, 27));
+            supplierPoints[index].marker.setIcon(myIcon);
+        }, function () {
+            $(this).css({
+                background:"#fff"
+            });
+            var index = $(this).attr("user-id");
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
+            supplierPoints[index].marker.setIcon(myIcon);
+
+        }).click(function (e) {
+            //鼠标点击事件
+            e.stopPropagation();
+            var index = $(this).attr("user-id");
+            var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
+            map.centerAndZoom(point, 15);
+        });
+
+
+    });
+
+
+//    map.clearOverlays();  //清除覆盖物
+
+    $(window).resize(function () {
+        windowHeight();
+    });
+
+    function windowHeight() {
+        var wh = $(window).height();
+        $("#map_container").height(wh);
+    }
+</script>
+
+</body>

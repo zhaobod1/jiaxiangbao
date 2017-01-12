@@ -16,10 +16,12 @@ function huo15_get_client_ip()
 
 
 
-// database host
-$db_host   = "localhost";
+
 
 if (huo15_get_client_ip() == '127.0.0.1') {
+
+	// database host
+	$db_host   = "211.149.214.242";
 	// database name
 	$db_name   = "jxb";
 
@@ -28,7 +30,23 @@ if (huo15_get_client_ip() == '127.0.0.1') {
 
 // database password
 	$db_pass   = "huo15com";
+
+
+
+	// database name
+	$db_name   = "jxb";
+
+// database username
+	$db_user   = "jxb";
+
+// database password
+	$db_pass   = "huo15com";
+
+
 } else {
+
+	// database host
+	$db_host   = "localhost";
 	// database name
 	$db_name   = "jxb";
 
@@ -66,7 +84,7 @@ define('AUTH_KEY', 'this is a key');
 
 define('OLD_AUTH_KEY', '');
 
-define('API_TIME', '2017-01-08 22:46:36');
+define('API_TIME', '2017-01-12 16:21:15');
 
 define('LICENCE', '');
 

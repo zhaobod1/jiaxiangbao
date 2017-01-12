@@ -1,0 +1,123 @@
+body {
+    background: #eee;
+}
+ol, ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+
+
+
+
+.shop-list-box{
+    margin-top: 0px;
+}
+.shop-list li{
+    padding: 10px 5px 0 5px;
+    background: #FFF;
+    margin-bottom: 10px;
+}
+.shop-list .shop-thumb{
+    width: 80px;
+    max-height: 80px;
+    float: left;
+    margin-right: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    text-align: center;
+}
+.shop-list .shop-thumb img{
+    max-width: 80px;
+    max-height: 80px;
+}
+.shop-list .shop-name{
+    margin-bottom: 10px;
+}
+.shop-list .shop-name a{
+    color: #333;
+}
+.shop-list .shop-address{
+    font-size: 12px;
+    color: #999;
+}
+.shop-list .shop-address .l{
+    display: block;
+    max-height: 36px;
+    line-height: 18px;
+    overflow: hidden;
+}
+.shop-list .shop-address .r{
+    font-size: 14px;
+}
+.shop-list .shop-products .product-thumb{
+    width: 90px;
+    height: 90px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.shop-list .shop-products ul{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+.shop-list .shop-products ul li{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    text-align: center;
+}
+
+.shop-list .shop-products .product-name{
+    width: 90px;
+    font-size: 12px;
+    line-height: 18px;
+    word-break: break-all;
+    margin: 0 auto;
+}
+.shop-list .shop-products .product-name .price{
+    color: #F40;
+}
+
+.shop-list .shop-action{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    border-top: 1px solid #EEE;
+    padding-bottom:15px;
+}
+.shop-list .shop-action .item{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+}
+.shop-list .shop-action a{
+    display: block;
+    height: 16px;
+    padding: 10px 0;
+    color: #2BB8AA;
+    vertical-align: bottom;
+}
+.shop-list .shop-action i.icon{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: no-repeat 0 0;
+    vertical-align: bottom;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+/*.shop-list .shop-action .navigation i.icon{
+    background-image: url(../images/iconfont-location-green.png);
+}
+.shop-list .shop-action .contact i.icon{
+    background-image: url(../images/iconfont-phone.png);
+}
+.shop-list .shop-action .shop i.icon{
+    background-image: url(../images/iconfont-shop.png);
+}*/
