@@ -15,7 +15,6 @@
 </head>
 <body>
 <!-- #BeginLibraryItem "/library/page_header_supplier.lbi" --><!-- #EndLibraryItem -->
-
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -36,62 +35,50 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">首页</a></li>
                 <li><a href="#">附近的商家</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">按区域检索 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
+                <li>
+                    <div class="search-div">
+                        <select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')">
+                            <option value="0">请选择</option>
+                            {foreach from=$country_list item=country}
+                            <option value="{$country.region_id}" {if $userSession.country eq $country.region_name}selected{/if}>{$country.region_name}</option>
+                            {/foreach}
+                        </select>
+                        <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')">
+                            <option value="0">请选择</option>
+                            {foreach from=$province_list item=province}
+                            <option value="{$province.region_id}" {if $userSession.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
+                            {/foreach}
+                        </select>
+                        <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
+                            <option value="0">请选择</option>
+                            {foreach from=$city_list item=city}
+                            <option value="{$city.region_id}" {if $userSession.city eq $city.region_name}selected{/if}>{$city.region_name}</option>
+                            {/foreach}
+                        </select>
+                        <!--<select name="district" id="selDistricts" {if !$district_list}style="display:none"{/if}>
+                        <option value="0">请选择</option>
+                        {foreach from=$district_list item=district}
+                        <option value="{$district.region_id}" {if $userSession.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
+                        {/foreach}
+                        </select>-->
+                    </div>
                 </li>
+
             </ul>
-            <form class="navbar-form navbar-left" role="search">
+            <form method="get" class="navbar-form navbar-left" role="search" action="supplier_near.php">
+                <input type="hidden" name="province" value="">
+                <input type="hidden" name="city" value="">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="青岛市北">
+                    <input type="text" name="supplier_shop_name" class="form-control" placeholder="输入商家名称 关键字">
                 </div>
-                <button type="submit" class="btn btn-default">搜索</button>
+                <button id="subData" class="btn btn-default">搜索</button>
             </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">备用按钮</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术支持 <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
+
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 
-<div>
-    <select name="province" id="selProvinces" onchange="region.changed(this, 2, 'selCities')">
-        <option value="0">请选择</option>
-        {foreach from=$province_list item=province}
-        <option value="{$province.region_id}" {if $userSession.province eq $province.region_id}selected{/if}>{$province.region_name}</option>
-        {/foreach}
-    </select>
-    <select name="city" id="selCities" onchange="region.changed(this, 3, 'selDistricts')">
-        <option value="0">请选择</option>
-        {foreach from=$city_list item=city}
-        <option value="{$city.region_id}" {if $userSession.city eq $city.region_id}selected{/if}>{$city.region_name}</option>
-        {/foreach}
-    </select>
-    <!--<select name="district" id="selDistricts" {if !$district_list}style="display:none"{/if}>
-    <option value="0">请选择</option>
-    {foreach from=$district_list item=district}
-    <option value="{$district.region_id}" {if $userSession.district eq $district.region_id}selected{/if}>{$district.region_name}</option>
-    {/foreach}
-    </select>-->
-</div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
@@ -220,23 +207,32 @@
         console.log(supplierPoints);
 
         //        鼠标经过事件
-
+        var rememberIndex = null;
         $(".shop-list li").hover(function () {
             $(this).css({
                 background:"rgba(101, 153, 0, 0.1)"
             });
+
+
+
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
+            if (rememberIndex) {
+                supplierPoints[rememberIndex].marker.setIcon(myIcon);
+            }
+
+
+
             var index = $(this).attr("user-id");
             var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
-            map.centerAndZoom(point,13);
+//            map.centerAndZoom(point,13);
             var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(20, 27));
             supplierPoints[index].marker.setIcon(myIcon);
+            rememberIndex = index;
         }, function () {
             $(this).css({
                 background:"#fff"
             });
-            var index = $(this).attr("user-id");
-            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
-            supplierPoints[index].marker.setIcon(myIcon);
+
 
         }).click(function (e) {
             //鼠标点击事件
@@ -245,6 +241,21 @@
             var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
             map.centerAndZoom(point, 15);
         });
+
+
+
+
+        //提交按钮
+
+        $("#subData").click(function (e) {
+            e.preventDefault();
+            $("input[name='province']").val($("#selProvinces").val());
+            $("input[name='city']").val($("#selCities").val());
+            $(".navbar-form").submit();
+        });
+
+
+
 
 
     });
@@ -260,6 +271,7 @@
         var wh = $(window).height();
         $("#map_container").height(wh);
     }
+
 </script>
 
 </body>

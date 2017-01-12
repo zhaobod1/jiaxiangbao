@@ -22,6 +22,7 @@ if ($_REQUEST['act'] == 'lists') {
 		exit($address);
 	}
 
+
 	/*require_once "wxjs/jssdk.php";
 	$ret = $db->getRow("SELECT  *  FROM `ecs_weixin_config`");
 	$jssdk = new JSSDK($appid=$ret['appid'], $ret['appsecret']);
@@ -52,8 +53,11 @@ if ($_REQUEST['act'] == 'lists') {
 	$cityObj = json_decode($res);
 	$content = $cityObj->content;
 	$address_detail = $content->address_detail;
+	$_SESSION['country'] = "中国";
 	$_SESSION['province'] = $address_detail->province;
+	$_SESSION['province'] = str_replace("省","",$_SESSION['province']);
 	$_SESSION['city'] = $address_detail->city;
+	$_SESSION['city'] = str_replace("市","",$_SESSION['city']);
 	$point = $content->point;
 	$_SESSION['latitude'] = $point->y;
 	$_SESSION['longitude'] = $point->x;
@@ -75,7 +79,32 @@ if ($_REQUEST['act'] == 'lists') {
 	$record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('supplier'). " WHERE status=1 AND latitude<>'' AND longitude<>''");
 	$pager  = get_pager('supplier_near.php', array(), $record_count, $page);
 	// 获取所有店铺
+
+
 	$sql="SELECT supplier_id,user_id,supplier_name,latitude,longitude FROM ". $ecs->table("supplier") ." WHERE status=1 AND latitude<>'' AND longitude<>''";
+	/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/13 */
+
+	if (isset($_REQUEST['province'])) {
+		@$_REQUEST['province'] = intval($_REQUEST['province']) ? : 0;
+		@$_REQUEST['city'] = intval($_REQUEST['city']) ? : 0;
+
+		if ($_REQUEST['province']) {
+			$sql.= " and province=".$_REQUEST['province'];
+		}
+		if ($_REQUEST['city']) {
+			$sql.= " and city=".$_REQUEST['city'];
+		}
+		if (isset($_REQUEST['supplier_shop_name']) && $_REQUEST['supplier_shop_name'] !='') {
+			$sql.=" and supplier_name like '%".addslashes_deep($_REQUEST['supplier_shop_name'])."%'";
+		}
+	} else {
+		if (isset($_REQUEST['supplier_shop_name']) && $_REQUEST['supplier_shop_name'] !='') {
+			$sql.=" and supplier_name like '%".addslashes_deep($_REQUEST['supplier_shop_name'])."%'";
+		}
+	}
+	dd($sql, 0);
+	/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/13 end */
+
 	$supplier_list = $db->GetAll($sql);
 
 	$geohash = new Geohash();
@@ -138,14 +167,14 @@ if ($_REQUEST['act'] == 'lists') {
 	$smarty->assign('supplier_list_json', $supplier_list_json);
 
 	//省列表
-	$province_list = get_regions(1, 0);
+	$province_list = get_regions(1, 1);
 	/*$city_list = get_regions(2, $row['province']);
 	$district_list = get_regions(3, $row['city']);*/
 
+	$smarty->assign('country_list', get_regions());
 	$smarty->assign('province_list', $province_list);
 	$smarty->assign('city_list', $city_list);
 	$smarty->assign('district_list', $district_list);
-
 
 	$smarty->display("supplier_city.dwt");
 

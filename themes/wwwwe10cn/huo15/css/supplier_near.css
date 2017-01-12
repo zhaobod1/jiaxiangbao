@@ -121,3 +121,22 @@ ol, ul {
 .shop-list .shop-action .shop i.icon{
     background-image: url(../images/iconfont-shop.png);
 }*/
+
+
+/*搜索框*/
+.nav>li>div.search-div {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+.navbar-nav>li>div.search-div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+}
+@media (min-width: 768px) {
+    .navbar-nav>li>div.search-div {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+}
