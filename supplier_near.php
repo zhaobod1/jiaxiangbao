@@ -102,7 +102,6 @@ if ($_REQUEST['act'] == 'lists') {
 			$sql.=" and supplier_name like '%".addslashes_deep($_REQUEST['supplier_shop_name'])."%'";
 		}
 	}
-	dd($sql, 0);
 	/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/13 end */
 
 	$supplier_list = $db->GetAll($sql);
