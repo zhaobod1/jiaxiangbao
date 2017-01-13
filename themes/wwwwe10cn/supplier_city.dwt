@@ -181,7 +181,7 @@
             e.preventDefault();
             map.centerAndZoom(init_point, zoomNum);
 
-        })
+        });
 //        安插标注
         var supplierPoints = {};
         for(var i in objJson) {
@@ -209,7 +209,7 @@
 
 
             (function () {
-                var index = objJson[i].user_id
+                var index = objJson[i].user_id;
                 // 将标注添加到地图中
                 supplierPoints[index].marker.addEventListener("click", function(){
 
