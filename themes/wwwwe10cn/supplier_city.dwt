@@ -154,6 +154,12 @@
 <script>
     var sJson = '{$supplier_list_json}';
     var objJson = $.parseJSON(sJson);
+    //初始放大倍数
+    var zoomNum = 17;
+    //标注大小
+    var markerSize = [30,80];
+    //偏移
+    var markerOffset = new BMap.Size(0, 0);
     $(function () {
 //        地图初始化
         windowHeight();
@@ -161,7 +167,7 @@
         var init_lat = $("input[name='init_lat']").val();
         var map = new BMap.Map("map_container");
         var init_point = new BMap.Point(init_lat,init_lng);
-        map.centerAndZoom(init_point, 15);
+        map.centerAndZoom(init_point, zoomNum);
         map.enableScrollWheelZoom(true);
         map.addControl(new BMap.NavigationControl());
 
@@ -169,7 +175,7 @@
 
         $("#backToPos").click(function (e) {
             e.preventDefault();
-            map.centerAndZoom(init_point, 15);
+            map.centerAndZoom(init_point, zoomNum);
 
         })
 //        安插标注
@@ -178,7 +184,8 @@
             supplierPoints[objJson[i].user_id] = objJson[i];
             supplierPoints[objJson[i].user_id].point = new BMap.Point(supplierPoints[objJson[i].user_id].longitude,supplierPoints[objJson[i].user_id].latitude);
             supplierPoints[objJson[i].user_id].marker = new BMap.Marker(supplierPoints[objJson[i].user_id].point);        // 创建标注
-            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
             supplierPoints[objJson[i].user_id].marker.setIcon(myIcon);
 
             map.addOverlay(supplierPoints[objJson[i].user_id].marker);
@@ -221,7 +228,8 @@
 
 
 
-            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(20, 27));
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
             if (rememberIndex) {
                 supplierPoints[rememberIndex].marker.setIcon(myIcon);
             }
@@ -230,8 +238,9 @@
 
             var index = $(this).attr("user-id");
             var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
-            map.centerAndZoom(point,14);
-            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(20, 27));
+            map.centerAndZoom(point,zoomNum);
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
             supplierPoints[index].marker.setIcon(myIcon);
             rememberIndex = index;
         }, function () {
@@ -245,7 +254,7 @@
             e.stopPropagation();
             var index = $(this).attr("user-id");
             var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
-            map.centerAndZoom(point, 15);
+            map.centerAndZoom(point, zoomNum);
         });
 
 
