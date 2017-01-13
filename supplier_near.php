@@ -46,11 +46,21 @@ if ($_REQUEST['act'] == 'lists') {
 	/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/12 */
 
 	//7686746443c75099720a3ea70d458fdd
-	$ip = huo15_get_client_ip();
-	$url = "http://api.map.baidu.com/location/ip?ak=7686746443c75099720a3ea70d458fdd&coor=bd09ll";
+	//$ip = huo15_get_client_ip();
+	//$ip = $_SERVER["REMOTE_ADDR"];
 
+	$ip = real_ip();
+	if ($ip=="127.0.0.1") {
+		$url = "http://api.map.baidu.com/location/ip?ak=7686746443c75099720a3ea70d458fdd&coor=bd09ll";
+
+
+	} else {
+		$url = "http://api.map.baidu.com/location/ip?ip=".$ip."&ak=7686746443c75099720a3ea70d458fdd&coor=bd09ll";
+
+	}
 	$res = file_get_contents($url);
 	$cityObj = json_decode($res);
+
 	$content = $cityObj->content;
 	$address_detail = $content->address_detail;
 	$_SESSION['country'] = "中国";

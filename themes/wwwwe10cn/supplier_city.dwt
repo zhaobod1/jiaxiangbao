@@ -34,7 +34,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">首页</a></li>
-                <li><a href="#">附近的商家</a></li>
+                <li><a href="supplier_near.php">全部商家</a></li>
+                <li><a id="backToPos" href="javascript:;">回到定位处</a></li>
                 <li>
                     <div class="search-div">
                         <select name="country" id="selCountries" onchange="region.changed(this, 1, 'selProvinces')">
@@ -81,10 +82,10 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-12">
             <div id="map_container"></div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-12">
             <input type="hidden" name="init_lng" value="{$latitude}">
             <input type="hidden" name="init_lat" value="{$longitude}">
             <div class="shop-list-box">
@@ -164,8 +165,13 @@
         map.enableScrollWheelZoom(true);
         map.addControl(new BMap.NavigationControl());
 
+//        返回定位处
 
+        $("#backToPos").click(function (e) {
+            e.preventDefault();
+            map.centerAndZoom(init_point, 15);
 
+        })
 //        安插标注
         var supplierPoints = {};
         for(var i in objJson) {
@@ -224,7 +230,7 @@
 
             var index = $(this).attr("user-id");
             var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
-//            map.centerAndZoom(point,13);
+            map.centerAndZoom(point,14);
             var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(20, 27));
             supplierPoints[index].marker.setIcon(myIcon);
             rememberIndex = index;
@@ -261,7 +267,7 @@
     });
 
 
-//    map.clearOverlays();  //清除覆盖物
+    //    map.clearOverlays();  //清除覆盖物
 
     $(window).resize(function () {
         windowHeight();
@@ -272,6 +278,8 @@
         $("#map_container").height(wh);
     }
 
+
 </script>
+<script src="themes/wwwwe10cn/huo15/js/supplier_city.js"></script>
 
 </body>
