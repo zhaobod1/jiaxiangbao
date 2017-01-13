@@ -160,6 +160,8 @@
     var markerSize = [30,80];
     //偏移
     var markerOffset = new BMap.Size(0, 0);
+
+
     $(function () {
 //        地图初始化
         windowHeight();
@@ -275,19 +277,15 @@
 
     });
 
-
     //    map.clearOverlays();  //清除覆盖物
 
     $(window).resize(function () {
         windowHeight();
     });
-
     function windowHeight() {
         var wh = $(window).height();
         $("#map_container").height(wh);
     }
-
-
 </script>
 <script src="themes/wwwwe10cn/huo15/js/supplier_city.js"></script>
 
