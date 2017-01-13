@@ -162,11 +162,132 @@
     var markerOffset = new BMap.Size(0, 0);
 
 
+    //地图插件
 
-    eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('$(b(){J();3 I=$("r[s=\'I\']").j();3 F=$("r[s=\'F\']").j();3 d=6 7.1c("10");3 G=6 7.n(F,I);d.q(G,o);d.1b(11);d.12(6 7.13());$("#16").k(b(e){e.S();d.q(G,o)})3 2={};1h(3 i 1f 4){2[4[i].9]=4[i];2[4[i].9].f=6 7.n(2[4[i].9].H,2[4[i].9].E);2[4[i].9].h=6 7.1k(2[4[i].9].f);3 c=6 7.y("v/u/D/B/R.z",6 7.x(g[0],g[1]));c.w(C);2[4[i].9].h.A(c);d.1j(2[4[i].9].h);3 1i={1l:1e,l:1g,1r:2[4[i].9].K};3 M="<L N=\'P:0 0 1q 0;1t:0.O 0\'><a 1s=\'1n.1m?1p=1o\' 14=\'15\'> "+2[4[i].9].K+"</a></L>"+"<p N=\'P:0;1d-l:1.5;17-18:19;1a-1N:O\'>1Q："+2[4[i].9].1R+"</p>"+"</1S>";2[4[i].9].Q=6 7.1P(M);(b(){3 8=4[i].1M[8].h.1O("k",b(){d.1Y(2[8].Q,2[8].f)})})()}1W.1X(2);3 t=1V;$(".1U-1T 1L").1z(b(){$(m).Z({W:"1y(1B, 1A, 0, 0.1)"});3 c=6 7.y("v/u/D/B/R.z",6 7.x(g[0],g[1]));c.w(C);1v(t){2[t].h.A(c)}3 8=$(m).V("U-X");3 f=6 7.n(2[8].H,2[8].E);d.q(f,o);3 c=6 7.y("v/u/D/B/1u.z",6 7.x(g[0],g[1]));c.w(C);2[8].h.A(c);t=8},b(){$(m).Z({W:"#1x"})}).k(b(e){e.1w();3 8=$(m).V("U-X");3 f=6 7.n(2[8].H,2[8].E);d.q(f,o)});$("#1C").k(b(e){e.S();$("r[s=\'1I\']").j($("#1H").j());$("r[s=\'1K\']").j($("#1J").j());$(".1E-1D").1G()})});$(T).1F(b(){J()});b J(){3 Y=$(T).l();$("#10").l(Y)}',62,123,'||supplierPoints|var|objJson||new|BMap|index|user_id||function|myIcon|map||point|markerSize|marker||val|click|height|this|Point|zoomNum||centerAndZoom|input|name|rememberIndex|wwwwe10cn|themes|setImageOffset|Size|Icon|png|setIcon|img|markerOffset|huo15|latitude|init_lat|init_point|longitude|init_lng|windowHeight|supplier_name|h4|sContent|style|2em|margin|infoWindow|markers|preventDefault|window|user|attr|background|id|wh|css|map_container|true|addControl|NavigationControl|target|_0|backToPos|font|size|13px|text|enableScrollWheelZoom|Map|line|250|in|100|for|opts|addOverlay|Marker|width|php|supplier|50|suppId|5px|title|href|padding|markers_red|if|stopPropagation|fff|rgba|hover|153|101|subData|form|navbar|resize|submit|selProvinces|province|selCities|city|li|user_idsupplierPoints|indent|addEventListener|InfoWindow|距离|distance_|div|list|shop|null|console|log|openInfoWindow'.split('|'),0,{}))
+    $(function () {
+//        地图初始化
+        windowHeight();
+        var init_lng = $("input[name='init_lng']").val();
+        var init_lat = $("input[name='init_lat']").val();
+        var map = new BMap.Map("map_container");
+        var init_point = new BMap.Point(init_lat,init_lng);
+        map.centerAndZoom(init_point, zoomNum);
+        map.enableScrollWheelZoom(true);
+        map.addControl(new BMap.NavigationControl());
+
+//        返回定位处
+
+        $("#backToPos").click(function (e) {
+            e.preventDefault();
+            map.centerAndZoom(init_point, zoomNum);
+
+        })
+//        安插标注
+        var supplierPoints = {};
+        for(var i in objJson) {
+            supplierPoints[objJson[i].user_id] = objJson[i];
+            supplierPoints[objJson[i].user_id].point = new BMap.Point(supplierPoints[objJson[i].user_id].longitude,supplierPoints[objJson[i].user_id].latitude);
+            supplierPoints[objJson[i].user_id].marker = new BMap.Marker(supplierPoints[objJson[i].user_id].point);        // 创建标注
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
+            supplierPoints[objJson[i].user_id].marker.setIcon(myIcon);
+
+            map.addOverlay(supplierPoints[objJson[i].user_id].marker);
 
 
 
+            var opts = {
+                width : 250,     // 信息窗口宽度
+                height: 100,     // 信息窗口高度
+                title : supplierPoints[objJson[i].user_id].supplier_name  // 信息窗口标题
+            };
+            var sContent =
+                    "<h4 style='margin:0 0 5px 0;padding:0.2em 0'><a href='supplier.php?suppId=50' target='_blank'> "+supplierPoints[objJson[i].user_id].supplier_name+"</a></h4>" +
+                    "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>距离："+supplierPoints[objJson[i].user_id].distance_+"</p>" +
+                    "</div>";
+            supplierPoints[objJson[i].user_id].infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+
+
+            (function () {
+                var index = objJson[i].user_id
+                // 将标注添加到地图中
+                supplierPoints[index].marker.addEventListener("click", function(){
+
+                    map.openInfoWindow(supplierPoints[index].infoWindow, supplierPoints[index].point);
+
+
+                });
+            })();
+
+
+        }
+        console.log(supplierPoints);
+
+        //        鼠标经过事件
+        var rememberIndex = null;
+        $(".shop-list li").hover(function () {
+            $(this).css({
+                background:"rgba(101, 153, 0, 0.1)"
+            });
+
+
+
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
+            if (rememberIndex) {
+                supplierPoints[rememberIndex].marker.setIcon(myIcon);
+            }
+
+
+
+            var index = $(this).attr("user-id");
+            var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
+            map.centerAndZoom(point,zoomNum);
+            var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(markerSize[0], markerSize[1]));
+            myIcon.setImageOffset(markerOffset);
+            supplierPoints[index].marker.setIcon(myIcon);
+            rememberIndex = index;
+        }, function () {
+            $(this).css({
+                background:"#fff"
+            });
+
+
+        }).click(function (e) {
+            //鼠标点击事件
+            e.stopPropagation();
+            var index = $(this).attr("user-id");
+            var point = new BMap.Point(supplierPoints[index].longitude,supplierPoints[index].latitude);
+            map.centerAndZoom(point, zoomNum);
+        });
+
+
+
+
+        //提交按钮
+
+        $("#subData").click(function (e) {
+            e.preventDefault();
+            $("input[name='province']").val($("#selProvinces").val());
+            $("input[name='city']").val($("#selCities").val());
+            $(".navbar-form").submit();
+        });
+
+
+
+
+
+    });
+
+    //    map.clearOverlays();  //清除覆盖物
+
+    $(window).resize(function () {
+        windowHeight();
+    });
+    function windowHeight() {
+        var wh = $(window).height();
+        $("#map_container").height(wh);
+    }
 </script>
 <script src="themes/wwwwe10cn/huo15/js/supplier_city.js"></script>
 
