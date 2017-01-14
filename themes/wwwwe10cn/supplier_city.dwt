@@ -156,6 +156,8 @@
         margin-bottom: 5px;
         font-weight: 700;
     }
+
+
 </style>
 <script>
     var sJson = '{$supplier_list_json}';
