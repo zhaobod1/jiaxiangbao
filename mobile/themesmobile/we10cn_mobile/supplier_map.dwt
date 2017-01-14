@@ -26,7 +26,7 @@
     <div class="content">
         <div id="allmap"></div> 
     </div>
-
+    <input type="hidden" id="supplier_name" value="{$supplier_name}">
     <script>
         var winHeight = $(window).height();
         var hdrHeight = $("header").height();
@@ -36,18 +36,7 @@
         var latitude = "{$latitude}";
         var longitude = "{$longitude}";
 
-        var map = new BMap.Map("allmap");
-        map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
-        map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
-        var point = new BMap.Point(longitude, latitude);
-        map.centerAndZoom(point, 16);
-        var marker = new BMap.Marker(point);        // 创建标注    
-        map.addOverlay(marker); 
-
-        var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
-        var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
-        map.addControl(top_left_control);
-        map.addControl(top_left_navigation);
+        var map=new BMap.Map("allmap");map.enableScrollWheelZoom();map.enableContinuousZoom();var point=new BMap.Point(longitude,latitude);map.centerAndZoom(point,16);var marker=new BMap.Marker(point);map.addOverlay(marker);var opts={position:point,offset:new BMap.Size(-30,0)};var label=new BMap.Label($("#supplier_name").val(),opts);label.setStyle({color:"red",fontSize:"12px",height:"20px",textAlign:"center",lineHeight:"20px",fontFamily:"微软雅黑",background:"rgba(255,255,255,0.9)"});map.addOverlay(label);var top_left_control=new BMap.ScaleControl({anchor:BMAP_ANCHOR_TOP_LEFT});var top_left_navigation=new BMap.NavigationControl();map.addControl(top_left_control);map.addControl(top_left_navigation);
 
     </script>
 
