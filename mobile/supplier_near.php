@@ -102,6 +102,11 @@ else if ($_REQUEST['act'] == 'map') {
 
 		$smarty->assign('latitude', $supplier['latitude']);
 		$smarty->assign('longitude', $supplier['longitude']);
+		/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/14 */
+		$smarty->assign('supplier_name', $supplier['supplier_name']);
+
+		/* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/14 end */
+
 
 		$smarty->display("supplier_map.dwt");
 	}

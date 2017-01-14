@@ -150,6 +150,12 @@
     #map_container  {
         width:100%;
     }
+    label {
+        display: inline-block;
+        max-width: none;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
 </style>
 <script>
     var sJson = '{$supplier_list_json}';
@@ -164,6 +170,7 @@
 
 //    地图插件
     $(function () {
+        console.log($("label.BMapLabel").parent());
 //        地图初始化
         windowHeight();
         var init_lng = $("input[name='init_lng']").val();
@@ -192,6 +199,25 @@
             supplierPoints[objJson[i].user_id].marker.setIcon(myIcon);
 
             map.addOverlay(supplierPoints[objJson[i].user_id].marker);
+            var opts = {
+                position : supplierPoints[objJson[i].user_id].point,    // 指定文本标注所在的地理位置
+                offset   : new BMap.Size(-30, 0)    //设置文本偏移量
+            };
+            var label = new BMap.Label(supplierPoints[objJson[i].user_id].supplier_name, opts);  // 创建文本标注对象
+            label.setStyle({
+                color : "red",
+                maxWidth : "auto",
+                fontSize : "12px",
+                height : "20px",
+                padding:"0 5px 0 5px",
+                textAlign:"center",
+                lineHeight : "20px",
+                fontFamily:"微软雅黑",
+                background:"rgba(255,255,255,0.9)"
+//                border:"none",
+//                background:"none"
+            });
+            map.addOverlay(label);
 
 
 
@@ -235,6 +261,7 @@
             myIcon.setImageOffset(markerOffset);
             if (rememberIndex) {
                 supplierPoints[rememberIndex].marker.setIcon(myIcon);
+
             }
 
 
@@ -245,11 +272,16 @@
             var myIcon = new BMap.Icon("themes/wwwwe10cn/huo15/img/markers_red.png", new BMap.Size(markerSize[0], markerSize[1]));
             myIcon.setImageOffset(markerOffset);
             supplierPoints[index].marker.setIcon(myIcon);
+            supplierPoints[index].marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
             rememberIndex = index;
         }, function () {
             $(this).css({
                 background:"#fff"
             });
+
+            var index = $(this).attr("user-id");
+
+            supplierPoints[index].marker.setAnimation(null); //跳动的动画
 
 
         }).click(function (e) {

@@ -26,7 +26,7 @@
     <div class="content">
         <div id="allmap"></div> 
     </div>
-
+    <input type="hidden" id="supplier_name" value="{$supplier_name}">
     <script>
         var winHeight = $(window).height();
         var hdrHeight = $("header").height();
@@ -42,7 +42,28 @@
         var point = new BMap.Point(longitude, latitude);
         map.centerAndZoom(point, 16);
         var marker = new BMap.Marker(point);        // 创建标注    
-        map.addOverlay(marker); 
+        map.addOverlay(marker);
+        /* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/14 */
+        var opts = {
+            position : point,    // 指定文本标注所在的地理位置
+            offset   : new BMap.Size(-30, 0)    //设置文本偏移量
+        };
+        var label = new BMap.Label($("#supplier_name").val(), opts);  // 创建文本标注对象
+        label.setStyle({
+            color : "red",
+            fontSize : "12px",
+            height : "20px",
+//            padding:"0 150px 0 1px",
+            textAlign:"center",
+            lineHeight : "20px",
+            fontFamily:"微软雅黑",
+            background:"rgba(255,255,255,0.9)"
+//                border:"none",
+//                background:"none"
+        });
+        map.addOverlay(label);
+        /* 青岛火一五信息科技有限公司huo15.com 日期：2017/1/14 end */
+
 
         var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
